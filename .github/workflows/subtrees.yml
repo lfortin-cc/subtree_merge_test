@@ -7,6 +7,8 @@ jobs:
   sync_subtrees:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@main
       - name: sync a
         # You may pin to the exact commit or the version.
         # uses: NxtLvLSoftware/git-subtree-action@3d555981a570a2275a91c07b04b38d5e90d48c05
