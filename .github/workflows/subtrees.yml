@@ -5,46 +5,35 @@ on:
     - main
 jobs:
   sync_subtrees:
+    
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        path:
+          - a
+          - b
+          - c
+    
+    name: Updating subtree ${{ matrix.path }}
+    
     steps:
-      - name: checkout
-        uses: actions/checkout@main
-      - name: sync a
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 0
         # You may pin to the exact commit or the version.
         # uses: NxtLvLSoftware/git-subtree-action@3d555981a570a2275a91c07b04b38d5e90d48c05
-        uses: NxtLvLSoftware/git-subtree-action@1.1
+      - uses: NxtLvLSoftware/git-subtree-action@1.1
         with:
           # Child repository to sync the subtree to (eg. owner/repository.)
-          repo: lfortin-cc/a
+          repo: lfortin-cc/${{ matrix.path }}
           # Path prefix in parent repo to split into child subtree (eg. src/PackageName.)
-          path: a
+          path: ${{ matrix.path }}
           # Deployment SSH key for pushing to child repo (checkout out deployment tokens for single repos or bot accounts for multi-repos/orgs.)
-#           deploy_key: 
+          deploy_key: ${{ secrets.DOWNSTREAM_GITHUB_DEPLOY_KEY }}
           # Create (or mirror) a tag on the child subtree repository (branch or tag ref that triggered the workflow when true.)
 #           tag: # optional, default is false
           # Force push to the child subtree repository (recommended for pure downstream mirrors.)
 #           force: # optional, default is false
           # Branch of child subtree repository (default is branch or tag ref that triggered the workflow.)
-          branch: main # optional, default is 
-      - name: sync b
-        # You may pin to the exact commit or the version.
-        # uses: NxtLvLSoftware/git-subtree-action@3d555981a570a2275a91c07b04b38d5e90d48c05
-        uses: NxtLvLSoftware/git-subtree-action@1.1
-        with:
-          # Child repository to sync the subtree to (eg. owner/repository.)
-          repo: lfortin-cc/b
-          # Path prefix in parent repo to split into child subtree (eg. src/PackageName.)
-          path: b
-          # Branch of child subtree repository (default is branch or tag ref that triggered the workflow.)
-          branch: main # optional, default is
-      - name: sync c
-        # You may pin to the exact commit or the version.
-        # uses: NxtLvLSoftware/git-subtree-action@3d555981a570a2275a91c07b04b38d5e90d48c05
-        uses: NxtLvLSoftware/git-subtree-action@1.1
-        with:
-          # Child repository to sync the subtree to (eg. owner/repository.)
-          repo: lfortin-cc/c
-          # Path prefix in parent repo to split into child subtree (eg. src/PackageName.)
-          path: c
-          # Branch of child subtree repository (default is branch or tag ref that triggered the workflow.)
-          branch: main # optional, default is
+#           branch: main # optional, default is 
